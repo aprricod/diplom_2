@@ -43,17 +43,4 @@ public class CreateNewUserTest {
                 .body("success", equalTo(true))
                 .and().statusCode(202);
     }
-
-//    @After
-//    public void deleteUser() {
-//
-//        ValidatableResponse rrr = given()
-//                .header("authorization", "bearer " + tokenValue)
-//                .when()
-//                .delete("https://stellarburgers.nomoreparties.site/api/auth/user")
-//                .then()
-//                .statusCode(202);
-//        String eee = rrr.extract().body().path("message");
-//        System.out.println(eee);
-//    }
 }
