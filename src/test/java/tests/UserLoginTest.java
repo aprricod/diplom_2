@@ -36,7 +36,6 @@ public class UserLoginTest {
         tokenValue = tokenFull.substring(7);
     }
 
-
     @Test
     public void successfulLoginTest() {
         ValidatableResponse auth = authUser.authUserWithFullData(userEmail, userPassword);
