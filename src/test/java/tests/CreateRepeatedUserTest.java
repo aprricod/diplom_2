@@ -3,6 +3,7 @@ package tests;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +17,9 @@ public class CreateRepeatedUserTest {
     CreateUser createUser = new CreateUser();
     DeleteUser deleteUser = new DeleteUser();
 
-    String userName = "test";
-    String userEmail = "stellar.test999@yopmail.com";
-    String userPassword = "123456";
+    String userName = RandomStringUtils.randomAlphabetic(6);
+    String userEmail = RandomStringUtils.randomAlphanumeric(10) + "@mail.com";
+    String userPassword = RandomStringUtils.randomAlphabetic(6);
 
     String tokenFull;
     String tokenValue;

@@ -3,6 +3,7 @@ package tests;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import ru.yandex.praktikum.CreateUser;
 
@@ -12,9 +13,10 @@ public class UnsuccessfulCreateUserTest {
 
     CreateUser createUser = new CreateUser();
 
-    String userEmail = "stellar.test15@yopmail.com";
-    String userPassword = "123456";
+    String userEmail = RandomStringUtils.randomAlphanumeric(10) + "@mail.com";
+    String userPassword = RandomStringUtils.randomAlphabetic(6);
 
+    //проверка неуспешного создания юзера без указания имени
     @Test
     @DisplayName("Create new user without name")
     @Description("Unsuccessful create new user without all required data")
