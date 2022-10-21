@@ -23,7 +23,8 @@ public class UnsuccessfulCreateUserTest {
     public void createUserWithoutName() {
         ValidatableResponse create = createUser.postUserDataWithoutName(userEmail, userPassword);
         create.assertThat()
-                .body("message", equalTo("Email, password and name are required fields"))
-                .and().statusCode(403);
+                .statusCode(403)
+                .and()
+                .body("message", equalTo("Email, password and name are required fields"));
     }
 }

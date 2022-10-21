@@ -9,7 +9,7 @@ import org.junit.Test;
 import ru.yandex.praktikum.CreateUser;
 import ru.yandex.praktikum.DeleteUser;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.*;
 
 public class CreateNewUserTest {
 
@@ -21,7 +21,6 @@ public class CreateNewUserTest {
     String userPassword = RandomStringUtils.randomAlphabetic(6);
 
     String tokenFull;
-    String tokenValue;
 
     //проверка успешного создания юзера
     @Test
@@ -29,19 +28,26 @@ public class CreateNewUserTest {
     @Description("Successful create new user with unique data")
     public void createNewUser() {
         ValidatableResponse create = createUser.postFullUserData(userName, userEmail, userPassword);
-        create.assertThat()
-                .body("success", equalTo(true))
-                .and().statusCode(200);
 
         tokenFull = create.extract().body().path("accessToken");
-        tokenValue = tokenFull.substring(7);
+
+        create.assertThat()
+                .statusCode(200)
+                .and()
+                .body("success", equalTo(true))
+                .and()
+                .body("accessToken", notNullValue());
     }
 
     @After
     public void deleteUserTest() {
+
+        String tokenValue = tokenFull.substring(7);
+
         ValidatableResponse delete = deleteUser.deleteUser(tokenValue);
         delete.assertThat()
-                .body("success", equalTo(true))
-                .and().statusCode(202);
+                .statusCode(202)
+                .and()
+                .body("success", equalTo(true));
     }
 }

@@ -29,8 +29,9 @@ public class CreateRepeatedUserTest {
     public void createNewUser() {
         ValidatableResponse create = createUser.postFullUserData(userName, userEmail, userPassword);
         create.assertThat()
-                .body("success", equalTo(true))
-                .and().statusCode(200);
+                .statusCode(200)
+                .and()
+                .body("success", equalTo(true));
 
         tokenFull = create.extract().body().path("accessToken");
         tokenValue = tokenFull.substring(7);
@@ -43,8 +44,9 @@ public class CreateRepeatedUserTest {
     public void createUserWithNonUniqueData() {
         ValidatableResponse create = createUser.postFullUserData(userName, userEmail, userPassword);
         create.assertThat()
-                .body("message", equalTo("User already exists"))
-                .and().statusCode(403);
+                .statusCode(403)
+                .and()
+                .body("message", equalTo("User already exists"));
     }
 
     //удаление юзера
@@ -52,7 +54,8 @@ public class CreateRepeatedUserTest {
     public void deleteUserTest() {
         ValidatableResponse delete = deleteUser.deleteUser(tokenValue);
         delete.assertThat()
-                .body("success", equalTo(true))
-                .and().statusCode(202);
+                .statusCode(202)
+                .and()
+                .body("success", equalTo(true));
     }
 }

@@ -29,8 +29,9 @@ public class UserLoginTest {
     public void createNewUser() {
         ValidatableResponse create = createUser.postFullUserData(userName, userEmail, userPassword);
         create.assertThat()
-                .body("success", equalTo(true))
-                .and().statusCode(200);
+                .statusCode(200)
+                .and()
+                .body("success", equalTo(true));
 
         tokenFull = create.extract().body().path("accessToken");
         tokenValue = tokenFull.substring(7);
@@ -39,13 +40,19 @@ public class UserLoginTest {
     @Test
     public void successfulLoginTest() {
         ValidatableResponse auth = authUser.authUserWithFullData(userEmail, userPassword);
-        auth.assertThat().body("success", equalTo(true)).and().statusCode(200);
+        auth.assertThat()
+                .statusCode(200)
+                .and()
+                .body("success", equalTo(true));
     }
 
     @Test
     public void unSuccessfulLoginTest() {
         ValidatableResponse auth = authUser.authUserWithoutPassword(userEmail);
-        auth.assertThat().body("success", equalTo(false)).and().statusCode(401);
+        auth.assertThat()
+                .statusCode(401)
+                .and()
+                .body("success", equalTo(false));
     }
 
     //удаление юзера
@@ -53,7 +60,8 @@ public class UserLoginTest {
     public void deleteUserTest() {
         ValidatableResponse delete = deleteUser.deleteUser(tokenValue);
         delete.assertThat()
-                .body("success", equalTo(true))
-                .and().statusCode(202);
+                .statusCode(202)
+                .and()
+                .body("success", equalTo(true));
     }
 }
