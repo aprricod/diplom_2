@@ -104,6 +104,35 @@ public class ChangeUserDataTest {
         System.out.println(name);
     }
 
+    @Test
+    @DisplayName("Change user")
+    @Description("Unsuccessful user data changing without authentication")
+    @Step("Change user")
+    public void patchUserDataWithoutAuthTest() {
+        ValidatableResponse response = given()
+                .contentType(ContentType.JSON)
+                .and()
+                .body(requestBody)
+                .when()
+                .patch("https://stellarburgers.nomoreparties.site/api/auth/user")
+                .then();
+
+        String email = response.extract().body().path("message");
+
+        response.assertThat()
+                .statusCode(401)
+                .and()
+                .body("success", equalTo(false))
+                .and()
+                .body("message", equalTo("You should be authorised"));
+
+        System.out.println(userName);
+        System.out.println(userEmail);
+        System.out.println(userPassword);
+        System.out.println(requestBody);
+        System.out.println(email);
+    }
+
     @After
     @Step("after")
     public void deleteUserTest() {
