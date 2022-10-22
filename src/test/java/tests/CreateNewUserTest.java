@@ -1,6 +1,7 @@
 package tests;
 
 import io.qameta.allure.Description;
+import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -19,18 +20,16 @@ public class CreateNewUserTest {
     String userName = RandomStringUtils.randomAlphabetic(6);
     String userEmail = RandomStringUtils.randomAlphanumeric(10) + "@mail.com";
     String userPassword = RandomStringUtils.randomAlphabetic(6);
-
     String tokenFull;
 
     //проверка успешного создания юзера
     @Test
     @DisplayName("Create new user")
     @Description("Successful create new user with unique data")
+    @Step("Create user")
     public void createNewUser() {
         ValidatableResponse create = createUser.postFullUserData(userName, userEmail, userPassword);
-
         tokenFull = create.extract().body().path("accessToken");
-
         create.assertThat()
                 .statusCode(200)
                 .and()
@@ -40,10 +39,9 @@ public class CreateNewUserTest {
     }
 
     @After
+    @Step("after")
     public void deleteUserTest() {
-
         String tokenValue = tokenFull.substring(7);
-
         ValidatableResponse delete = deleteUser.deleteUser(tokenValue);
         delete.assertThat()
                 .statusCode(202)

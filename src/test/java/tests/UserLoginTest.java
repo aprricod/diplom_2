@@ -1,5 +1,8 @@
 package tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
@@ -20,21 +23,18 @@ public class UserLoginTest {
     String userName = RandomStringUtils.randomAlphabetic(6);
     String userEmail = RandomStringUtils.randomAlphanumeric(10) + "@mail.com";
     String userPassword = RandomStringUtils.randomAlphabetic(6);
-
     String tokenFull;
-    String tokenValue;
 
     //создания нового юзера
     @Before
+    @Step("before")
     public void createNewUser() {
         ValidatableResponse create = createUser.postFullUserData(userName, userEmail, userPassword);
+        tokenFull = create.extract().body().path("accessToken");
         create.assertThat()
                 .statusCode(200)
                 .and()
                 .body("success", equalTo(true));
-
-        tokenFull = create.extract().body().path("accessToken");
-        tokenValue = tokenFull.substring(7);
     }
 
     @Test
@@ -47,6 +47,9 @@ public class UserLoginTest {
     }
 
     @Test
+    @DisplayName("Unsuccessful user login")
+    @Description("Unsuccessful user login without all required data")
+    @Step("Create user")
     public void unSuccessfulLoginTest() {
         ValidatableResponse auth = authUser.authUserWithoutPassword(userEmail);
         auth.assertThat()
@@ -57,7 +60,9 @@ public class UserLoginTest {
 
     //удаление юзера
     @After
+    @Step("after")
     public void deleteUserTest() {
+        String tokenValue = tokenFull.substring(7);
         ValidatableResponse delete = deleteUser.deleteUser(tokenValue);
         delete.assertThat()
                 .statusCode(202)

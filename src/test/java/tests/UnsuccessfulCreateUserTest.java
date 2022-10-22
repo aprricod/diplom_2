@@ -1,6 +1,7 @@
 package tests;
 
 import io.qameta.allure.Description;
+import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -20,6 +21,7 @@ public class UnsuccessfulCreateUserTest {
     @Test
     @DisplayName("Create new user without name")
     @Description("Unsuccessful create new user without all required data")
+    @Step("Create user")
     public void createUserWithoutName() {
         ValidatableResponse create = createUser.postUserDataWithoutName(userEmail, userPassword);
         create.assertThat()
