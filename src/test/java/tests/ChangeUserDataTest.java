@@ -1,6 +1,7 @@
 package tests;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -72,6 +73,7 @@ public class ChangeUserDataTest {
         Response response = given()
                 .log().all()
                 .header("authorization", "bearer " + tokenValue)
+                .contentType(ContentType.JSON)
                 .and()
                 .body(requestBody)
                 .when()
