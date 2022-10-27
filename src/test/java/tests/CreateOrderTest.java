@@ -1,5 +1,8 @@
 package tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
@@ -25,6 +28,9 @@ public class CreateOrderTest {
 
     // заказ с авторизацией, с ингредиентами
     @Test
+    @DisplayName("Create new order")
+    @Description("Successful create new order with auth & ingredients")
+    @Step("Create order")
     public void createOrderWithAuthWithIngredientsTest() {
         ValidatableResponse create = createUser.postFullUserData(userName, userEmail, userPassword);
         tokenFull = create.extract().body().path("accessToken");
@@ -52,6 +58,9 @@ public class CreateOrderTest {
 
     // заказ без авторизации, с ингредиентами
     @Test
+    @DisplayName("Create new order")
+    @Description("Successful create new order without auth, with ingredients")
+    @Step("Create order")
     public void createOrderWithoutAuthWithIngredientsTest() {
         ValidatableResponse placeOrder = createOrder.createOrderWithoutAuthWithIngredients(validIngredients);
         placeOrder.assertThat()
@@ -62,6 +71,9 @@ public class CreateOrderTest {
 
     // заказ без авторизации, с неверным хешем ингредиентов
     @Test
+    @DisplayName("Create new order")
+    @Description("Unsuccessful create new order without auth, with invalid ingredients hash")
+    @Step("Create order")
     public void createOrderWithoutAuthWithInvalidIngredientsTest() {
         ValidatableResponse placeOrder = createOrder.createOrderWithoutAuthWithIngredients(invalidIngredients);
         placeOrder.assertThat()
@@ -70,6 +82,9 @@ public class CreateOrderTest {
 
     // заказ без авторизации, без ингредиентов
     @Test
+    @DisplayName("Create new order")
+    @Description("Unsuccessful create new order without auth & ingredients")
+    @Step("Create order")
     public void createOrderWithoutAuthWithoutIngredientsTest() {
         ValidatableResponse placeOrder = createOrder.createOrderWithoutAuthWithoutIngredients();
         placeOrder.assertThat()

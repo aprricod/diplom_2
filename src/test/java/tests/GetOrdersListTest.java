@@ -1,9 +1,15 @@
 package tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
-import ru.yandex.praktikum.*;
+import ru.yandex.praktikum.CreateOrder;
+import ru.yandex.praktikum.CreateUser;
+import ru.yandex.praktikum.DeleteUser;
+import ru.yandex.praktikum.GetOrdersList;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -22,6 +28,9 @@ public class GetOrdersListTest {
     String validIngredients = "{\"ingredients\" : [\"61c0c5a71d1f82001bdaaa6d\", \"61c0c5a71d1f82001bdaaa72\"]}";
 
     @Test
+    @DisplayName("Get orders list")
+    @Description("Successful get user orders list with auth")
+    @Step("Get list")
     public void getOrdersListWithAuth() {
         ValidatableResponse create = createUser.postFullUserData(userName, userEmail, userPassword);
         tokenFull = create.extract().body().path("accessToken");
@@ -58,6 +67,9 @@ public class GetOrdersListTest {
     }
 
     @Test
+    @DisplayName("Get orders list")
+    @Description("Unsuccessful get orders list without auth")
+    @Step("Get list")
     public void getOrdersListWithoutAuth() {
         ValidatableResponse getOrders = getOrdersList.getOrdersWithoutAuth();
         getOrders.assertThat()
