@@ -39,10 +39,8 @@ public class CreateOrderTest {
 
         ValidatableResponse placeOrder = createOrder.createOrderWithAuthWithIngredients(tokenValue, validIngredients);
         placeOrder.assertThat()
-                .log().all()
                 .statusCode(200)
                 .and()
-                .log().all()
                 .body("success", equalTo(true));
 
         ValidatableResponse delete = deleteUser.deleteUser(tokenValue);
@@ -57,10 +55,8 @@ public class CreateOrderTest {
     public void createOrderWithoutAuthWithIngredientsTest() {
         ValidatableResponse placeOrder = createOrder.createOrderWithoutAuthWithIngredients(validIngredients);
         placeOrder.assertThat()
-                .log().all()
                 .statusCode(200)
                 .and()
-                .log().all()
                 .body("success", equalTo(true));
     }
 
@@ -69,11 +65,7 @@ public class CreateOrderTest {
     public void createOrderWithoutAuthWithInvalidIngredientsTest() {
         ValidatableResponse placeOrder = createOrder.createOrderWithoutAuthWithIngredients(invalidIngredients);
         placeOrder.assertThat()
-                .log().all()
-                .statusCode(200)
-                .and()
-                .log().all()
-                .body("success", equalTo(true));
+                .statusCode(500);
     }
 
     // заказ без авторизации, без ингредиентов
@@ -81,10 +73,10 @@ public class CreateOrderTest {
     public void createOrderWithoutAuthWithoutIngredientsTest() {
         ValidatableResponse placeOrder = createOrder.createOrderWithoutAuthWithoutIngredients();
         placeOrder.assertThat()
-                .log().all()
-                .statusCode(200)
+                .statusCode(400)
                 .and()
-                .log().all()
-                .body("success", equalTo(true));
+                .body("success", equalTo(false))
+                .and()
+                .body("message", equalTo("Ingredient ids must be provided"));
     }
 }
