@@ -4,10 +4,10 @@ public class Order {
 
     private String ingredients;
 
-    private Order() {
+    public Order() {
     }
 
-    private Order(String ingredients) {
+    public Order(String ingredients) {
         this.ingredients = ingredients;
     }
 
