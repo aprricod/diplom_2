@@ -1,0 +1,72 @@
+package tests;
+
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
+import io.restassured.response.ValidatableResponse;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import ru.yandex.praktikum.AuthUser;
+import ru.yandex.praktikum.CreateUser;
+import ru.yandex.praktikum.DeleteUser;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+
+public class UserLoginTest {
+
+    AuthUser authUser = new AuthUser();
+    CreateUser createUser = new CreateUser();
+    DeleteUser deleteUser = new DeleteUser();
+
+    String userName = RandomStringUtils.randomAlphabetic(6);
+    String userEmail = RandomStringUtils.randomAlphanumeric(10) + "@mail.com";
+    String userPassword = RandomStringUtils.randomAlphabetic(6);
+    String tokenFull;
+
+    //создания нового юзера
+    @Before
+    @Step("before")
+    public void createNewUser() {
+        ValidatableResponse create = createUser.postFullUserData(userName, userEmail, userPassword);
+        tokenFull = create.extract().body().path("accessToken");
+        create.assertThat()
+                .statusCode(200)
+                .and()
+                .body("success", equalTo(true));
+    }
+
+    @Test
+    public void successfulLoginTest() {
+        ValidatableResponse auth = authUser.authUserWithFullData(userEmail, userPassword);
+        auth.assertThat()
+                .statusCode(200)
+                .and()
+                .body("success", equalTo(true));
+    }
+
+    @Test
+    @DisplayName("Unsuccessful user login")
+    @Description("Unsuccessful user login without all required data")
+    @Step("Create user")
+    public void unSuccessfulLoginTest() {
+        ValidatableResponse auth = authUser.authUserWithoutPassword(userEmail);
+        auth.assertThat()
+                .statusCode(401)
+                .and()
+                .body("success", equalTo(false));
+    }
+
+    //удаление юзера
+    @After
+    @Step("after")
+    public void deleteUserTest() {
+        String tokenValue = tokenFull.substring(7);
+        ValidatableResponse delete = deleteUser.deleteUser(tokenValue);
+        delete.assertThat()
+                .statusCode(202)
+                .and()
+                .body("success", equalTo(true));
+    }
+}
